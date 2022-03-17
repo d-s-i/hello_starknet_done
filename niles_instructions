@@ -1,0 +1,42 @@
+docker run --rm -it -v %cd%:/work --workdir /work lucaslvy/nile:0.8.0-x86
+Usage: nile [OPTIONS] COMMAND [ARGS]...
+
+Cairo Versions: https://hub.docker.com/r/shardlabs/cairo-cli/tags
+nile documentation: https://github.com/OpenZeppelin/nile#usage 
+
+  Nile CLI group.
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  call     Call functions of StarkNet smart contracts.
+  clean    Remove default build directory.
+  compile  Compile cairo contracts.
+  deploy   Deploy StarkNet smart contract.
+  init     Nile CLI group.
+  install  Install Cairo.
+  invoke   Invoke functions of StarkNet smart contracts.
+  node     Start StarkNet local network.
+  run      Run Nile scripts with NileRuntimeEnvironment.
+  send     Invoke a contract\'s method through an Account.
+  setup    Set up an Account contract.
+  test     Run cairo test contracts.
+  version  Print out toolchain version.
+
+Compilation:
+  - Cairo: 
+docker run --rm -it -v %cd%:/work --workdir /work shardlabs/cairo-cli:latest cairo-compile contracts/contract.cairo --output artifacts/contract.json --abi abis/contract_abi.json
+  - Starknet : 
+docker run --rm -it -v %cd%:/work --workdir /work lucaslvy/cairo-cli:0.8.0 starknet-compile contracts/amm.cairo --output artifacts/amm.json --abi artifacts/abis/amm.json
+
+Running Cairo File:
+docker run --rm -it -v %cd%:/work --workdir /work shardlabs/cairo-cli:latest cairo-run --program=artifacts/interfaces_test.json --print_output --layout=small
+
+Deployments:
+# docker run  --rm -it -v %cd%:/work --workdir /work lucaslvy/nile:0.8.0-x86 deploy FILE_NAME --network NETWORK_NAME
+docker run  --rm -it -v %cd%:/work --workdir /work lucaslvy/nile:0.8.0-x86 deploy interfaces_test --network goerli
+
+Call/Invoke Starknet Contract:
+# docker run --rm -it -v %cd%:/work --workdir /work lucaslvy/nile:0.8.0-x86 invoke CONTRACT_ADDR METHOD_NAME PARAM1 PARAM2 --network NETWORK_NAME
+docker run --rm -it -v %cd%:/work --workdir /work lucaslvy/nile:0.8.0-x86 call 0x06f401fe9b6248534de542f7ad0d17fc8f72b460fb4d8bfea93b12628ee342cd owner --network goerli
